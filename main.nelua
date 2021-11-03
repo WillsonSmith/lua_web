@@ -1,6 +1,22 @@
 require 'config'
 require 'libs/minilua/minilua'
 
+--[[
+
+Can I create one instance of lua state and reuse it?
+
+Add ability to add files, modules etc.
+Add ability to have multiple return types.
+Add ability to specify then call specific functions?
+
+local function add(f, s)
+  return f + s
+end
+
+exec_lua('add', 1, 2) or something
+
+--]]
+
 local function exec_lua(lua_code: cstring): cstring <cexport, codename 'exec_lua'>
   local L = luaL_newstate();
   luaL_openlibs(L)

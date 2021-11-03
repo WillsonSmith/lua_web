@@ -3,6 +3,8 @@ local compiler = require 'nelua.ccompiler'
 if compiler.get_cc_info().is_emscripten then
   cflags "-s EXPORTED_FUNCTIONS=\"['_main', '_exec_lua']\""
   cflags "-s EXPORTED_RUNTIME_METHODS=\"['ccall', 'cwrap']\""
+  cflags "-s MODULARIZE=1"
+  cflags "-s EXPORT_ES6=1"
 else
 end
 ]]

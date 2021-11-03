@@ -9,10 +9,8 @@
 <body>
   <script type="module">
     import LoadLua from './lua_loader.js';
-    const mod = await LoadLua();
-    console.log(mod)
-    const lua = mod.cwrap('exec_lua', 'string', ['string']);
-    
+    const lua = (await LoadLua()).cwrap('exec_lua', 'string', ['string']);
+
     const array = [1,2,3,4,5];
     const incrementedArray = lua(`
       local new_array = {}
@@ -24,9 +22,6 @@
         print(v)
       end
     `)
-
-    console.log(incrementedArray)
-
   </script>
 </body>
 </html>
