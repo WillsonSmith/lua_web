@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="module">
+    import LoadLua from './lua_loader.js';
+    const mod = await LoadLua();
+    console.log(mod)
+    const lua = mod.cwrap('exec_lua', 'string', ['string']);
+    
+    const array = [1,2,3,4,5];
+    const incrementedArray = lua(`
+      local new_array = {}
+      for k, v in ipairs({${array.join(', ')}}) do
+        table.insert(new_array, v + 1)
+      end
+      
+      for k, v in ipairs(new_array) do
+        print(v)
+      end
+    `)
+
+    console.log(incrementedArray)
+
+  </script>
+</body>
+</html>
