@@ -8,11 +8,10 @@
 </head>
 <body>
   <script type="module">
-    import LoadLua from './lua_loader.js';
-    const lua = (await LoadLua()).cwrap('exec_lua', 'string', ['string']);
+    import {Lua} from './module.js';
 
     const array = [1,2,3,4,5];
-    const incrementedArray = lua(`
+    const luaCode = `
       local new_array = {}
       for k, v in ipairs({${array.join(', ')}}) do
         table.insert(new_array, v + 1)
@@ -21,7 +20,21 @@
       for k, v in ipairs(new_array) do
         print(v)
       end
-    `)
+    `;
+
+    (async() => {
+      const arrayIncrementer = await Lua.new(luaCode);
+      const res = arrayIncrementer.exec();
+
+      const stringTransformer = await Lua.new(`
+        local original_string = "${'lol'}"
+        print(string.upper(original_string))
+
+        return string.upper(original_string)
+      `);
+
+      console.log(stringTransformer.exec());
+    })();
   </script>
 </body>
 </html>

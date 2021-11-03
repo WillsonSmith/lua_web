@@ -1,26 +1,28 @@
 import LoadLua from './lua_loader.js';
 
-async function lua(code) {
-  const raw = code.raw[0];
-  const module = await LoadLua();
-  const l = module.cwrap('exec_lua', 'string', ['string']);
+export class Lua {
+  _currentCode = '';
 
-  return l(raw);
-}
-
-lua.addModule = (code, module_name)  => {
-  /**
-   * Whatever
-   */
-}
-
-/** Convert Array or Object to Lua table */
-lua.table = (item) => {
-  if (Array.isArray(item)) {
-    return item.join(', ') // rudimentary, not good enough, doens't do nested etc.
+  constructor(code, execFn) {
+    this.code = code;
+    this._exec = execFn;
   }
-  /**
-   * key val in object
-   * {[key] = val, ...}
-   */
+
+  static async new(code) {
+    if (code) this.code = code;
+    const program = await LoadLua();
+    return new Lua(code, program.cwrap('exec_lua', 'string', ['string']));
+  }
+
+  exec() {
+    return this._exec(this.code);
+  }
+
+  set code(value) {
+    this._currentCode = value;
+  }
+
+  get code() {
+    return this._currentCode;
+  }
 }

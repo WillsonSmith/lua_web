@@ -15,15 +15,23 @@ end
 
 exec_lua('add', 1, 2) or something
 
+Can I have one exec_lua and pass in a "type" to convert to and return?
+Using `generalize()` to do thing?
+
 --]]
 
 local function exec_lua(lua_code: cstring): cstring <cexport, codename 'exec_lua'>
   local L = luaL_newstate();
   luaL_openlibs(L)
   luaL_loadstring(L, lua_code)
-  lua_call(L, 0, 1)
+  lua_call(L, 0, 1) -- nargs, nresults
 
-  local result = lua_tostring(L, -1)
+  local result = lua_tostring(L, -1) -- index of stack, get string of latest item (-1)
+  --[[ 
+    I guess arrays would just be getting many from call stack
+    Or just return many
+    return table.unpack({1,2,3,4,5})
+  --]]
   lua_close(L)
   return result
 end
