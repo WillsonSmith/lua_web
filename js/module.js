@@ -9,7 +9,7 @@ export class Lua {
   }
 
   static async new(code) {
-    if (code) this.code = code;
+    if (!code) return console.error('no code provided');
     const program = await LoadLua();
     return new Lua(code, program.cwrap('exec_lua', 'string', ['string']));
   }
