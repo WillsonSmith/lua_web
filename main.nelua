@@ -1,0 +1,14 @@
+require 'config'
+require 'libs/minilua/minilua'
+
+local function exec_lua(lua_code: cstring): cstring <cexport, codename 'exec_lua'>
+  print(lua_code)
+  local L = luaL_newstate();
+  luaL_openlibs(L)
+  luaL_loadstring(L, lua_code)
+  lua_call(L, 0, 1)
+
+  local result = lua_tostring(L, -1)
+  lua_close(L)
+  return result
+end
